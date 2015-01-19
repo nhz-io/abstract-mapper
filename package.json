@@ -1,0 +1,22 @@
+{
+  "name": "abstract-mapper",
+  "version": "0.0.1",
+  "description": "Abstract Object Mapper",
+  "main": "mapper.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nhz-io/abstract-mapper.git"
+  },
+  "keywords": [
+    "nhz.io",
+    "abstract",
+    "object",
+    "mapper"
+  ],
+  "author": "nhz.io",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nhz-io/abstract-mapper/issues"
+  },
+  "homepage": "https://github.com/nhz-io/abstract-mapper"
+}
