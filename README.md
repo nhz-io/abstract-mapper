@@ -11,7 +11,7 @@
 ### Node
 `var AbstractMapper = require('abstract-mapper');`
 
-### Generic
+### Object -> DOM
 ```javascript
 var mapper = new AbstractMapper({
   '!': function() { /* Context Initializer */
@@ -29,6 +29,21 @@ var mapper = new AbstractMapper({
 });
 
 mapper({ title: 'Mapper Demo', content: 'FOOBAR!' });
+```
+
+### DOM -> Object
+```javascript
+var mapper = new AbstractMapper({
+  '!': function() { /* Context Initializer */
+    this.target = {};
+  },
+  innerHTML: function() {
+    this.target.title = this.data.querySelector('.title').innerHTML;
+    this.target.content = this.data.querySelector('.content').innerHTML;
+  }
+});
+
+mapper(document.body);
 ```
 
 ## Map

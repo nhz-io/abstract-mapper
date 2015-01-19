@@ -37,7 +37,7 @@
         } else {
           for (key in this.map) {
             if (_hasProp(this.map, key) &&
-                _hasProp(this.data, key) && key !== '!') {
+                this.data[key] !== undefined && key !== '!') {
 
               value = this.data[key];
               mapper = this.map[key];
