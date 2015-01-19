@@ -40,11 +40,13 @@
 
               value = this.data[key];
               mapper = this.map[key];
+
               if (typeof mapper === 'function') {
                 mapper.call(this, value);
               } else {
                 context = this.clone();
                 context.parent = this;
+                context.map = mapper;
                 context.mapper(value);
               }
             }

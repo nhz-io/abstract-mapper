@@ -46,6 +46,76 @@ var mapper = new AbstractMapper({
 mapper(document.body);
 ```
 
+### Object -> Object
+```javascript
+var mapper = new AbstractMapper({
+  '!': function() { /* Context Initializer */
+    this.target = {};
+  },
+  key: function(value) {
+    this.target[key] = value;
+  }
+});
+
+mapper(document.body);
+```
+
+### Array -> Array
+```javascript
+var mapper = new AbstractMapper({
+  '!': function() {
+    if(this.idx >= 0) {
+      var target = {};
+      this.target.push(target);
+      this.target = target;
+    } else {
+      this.target = [];
+    }
+  },
+  key: function(value) {
+    this.target.foo = value;
+  }
+});
+
+var result = mapper([ {key:'foo'}, {key:'bar'} ]);
+```
+
+### DOM -> DOM
+```javascript
+var source, target;
+source = document.createElement('div');
+target = document.createElement('div');
+
+source.innerHTML = '\
+  <div class="foo">FOO!</div>\
+  <div class="bar">BAR!</div>';
+
+target.innerHTML = '\
+  <div class="foo"></div>\
+  <div class="bar"></div>';
+
+document.body.appenChild(source);
+document.body.appendChild(target);
+
+var mapper = new AbstractMapper({
+  '!': function() { /* Context Initializer */
+    this.target = target;
+  },
+  innerHTML: function() {
+    var source, target;
+    source = this.data.querySelector('.foo');
+    target = this.target.querySelector('.foo');
+    target.innerHTML = source.innerHTML;
+
+    source = this.data.querySelector('.bar');
+    target = this.target.querySelector('.bar');
+    target.innerHTML = source.innerHTML;
+  }
+});
+
+var result = mapper(source);
+```
+
 ### Map
 ```javascript
 /* For every method below `this` is set to current Context */
