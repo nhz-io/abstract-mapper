@@ -1,14 +1,18 @@
 /*jslint indent: 2, maxlen: 80, browser: true, node: true */
 (function () {
   "use strict";
-  var Context, AbstractMapper;
+  var Context, AbstractMapper,
+    _hasProp = function(object, key) {
+      return Object.hasOwnProperty.call(object, key);
+    };
+
   Context = function (map, options) {
     var key;
     this.map = map;
     this.type = map instanceof Array ? 'array' : 'object';
     this.target = this.parent = this.data = null;
     for (key in options) {
-      if (options.hasOwnProperty(key)) {
+      if (_hasProp(options, key)) {
         this[key] = options[key];
       }
     }
@@ -18,12 +22,7 @@
     mapper: function (data) {
       if (this.map) {
         var i, key, init, value, context, mapper;
-        var _hasProp = function(object, key) {
-          return Object.hasOwnProperty.call(object, key);
-        };
-
         this.data = data;
-
         init = this.map['!'] || function () { this.target = []; };
         init.call(this);
 
