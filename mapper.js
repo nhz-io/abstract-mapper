@@ -9,7 +9,6 @@
   Context = function (map, options) {
     var key;
     this.map = map;
-    this.type = map instanceof Array ? 'array' : 'object';
     this.target = this.parent = this.data = null;
     for (key in options) {
       if (_hasProp(options, key)) {
@@ -56,7 +55,7 @@
       return this.target;
     },
     clone: function () {
-      return Object.clone(this);
+      return new Context(null, this);
     }
   };
 

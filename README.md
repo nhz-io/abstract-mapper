@@ -46,7 +46,7 @@ var mapper = new AbstractMapper({
 mapper(document.body);
 ```
 
-## Map
+### Map
 ```javascript
 /* For every method below `this` is set to current Context */
 {
@@ -61,7 +61,7 @@ mapper(document.body);
 }
 ```
 
-## Context
+### Context
 ```javascript
 {
   target: {}, /* Mapper target. Set with Initializer */
@@ -72,5 +72,8 @@ mapper(document.body);
   clone: function() { /* Context clone method */}
 }
 ```
+## Benchmark
+###  [JSPERF](http://jsperf.com/abstract-mapper)
+
 ## License
 ### [MIT](LICENSE)
