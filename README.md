@@ -94,7 +94,7 @@ target.innerHTML = '\
   <div class="foo"></div>\
   <div class="bar"></div>';
 
-document.body.appenChild(source);
+document.body.appendChild(source);
 document.body.appendChild(target);
 
 var mapper = new AbstractMapper({
@@ -137,6 +137,7 @@ var result = mapper(source);
   target: {}, /* Mapper target. Set with Initializer */
   parent: null, /* Set to parent Context when nested */
   data: {}, /* Set to the data passed to mapper */
+  map: {}, /* Map passed to mapper */
   idx: 0, /* Exists when mapping list item */
   mapper: function(data) { /* Context mapper method */ },
   clone: function() { /* Context clone method */}
