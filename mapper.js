@@ -6,18 +6,17 @@
       return Object.hasOwnProperty.call(object, key);
     };
 
-  Context = function (map, options) {
-    var key;
-    this.map = map;
-    this.target = this.parent = this.data = null;
-    for (key in options) {
-      if (_hasProp(options, key)) {
-        this[key] = options[key];
+  Context = {
+    init: function (map, options) {
+      var key;
+      this.map = map;
+      this.target = this.parent = this.data = null;
+      for (key in options) {
+        if (_hasProp(options, key)) {
+          this[key] = options[key];
+        }
       }
-    }
-  };
-
-  Context.prototype = {
+    },
     mapper: function (data) {
       if (this.map) {
         var i, key, init, value, context, mapper;
@@ -53,16 +52,18 @@
           }
         }
       }
-
       return this.target;
     },
     clone: function () {
-      return new Context(null, this);
+      var result = Object.create(Context);
+      result.init(null, this);
+      return result;
     }
   };
 
   AbstractMapper = function (map, options) {
-    var context = new Context(map, options);
+    var context = Object.create(Context);
+    context.init(map, options);
     return function mapper(data) {
       return context.mapper(data);
     };

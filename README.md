@@ -116,6 +116,42 @@ var mapper = new AbstractMapper({
 var result = mapper(source);
 ```
 
+### DOM -> JSON
+```javascript
+var mapper = AbstractMapper({
+  '!': function() { this.target = {}; },
+  nodeName: function(value) { this.target.element = value; },
+  childNodes: function(value) {
+    var i, context, child;
+    if(value.length > 0) {
+      this.target.children = [];
+      for(i=0; i< value.length; i++) {
+        child = value[i];
+        if(child.nodeType === 3) {
+          if(child.textContent.replace(/^\s+$/gm, '').length > 0) {
+            this.target.children.push(child.textContent);
+          }
+        } else {
+          context = this.clone();
+          this.target.children.push(context.mapper(child));
+        }
+      }
+    }
+  },
+  attributes: function(value) {
+    var i;
+    if(value.length > 0) {
+      this.target.attributes = {};
+      for(i=0; i < value.length; i++) {
+        this.target.attributes[value[i].name] = value[i].value;
+      }
+    }
+  }
+});
+
+JSON.stringify(mapper(document.body));
+```
+
 ### Map
 ```javascript
 /* For every method below `this` is set to current Context */
@@ -139,6 +175,7 @@ var result = mapper(source);
   data: {}, /* Set to the data passed to mapper */
   map: {}, /* Map passed to mapper */
   idx: 0, /* Exists when mapping list item */
+  init: function(map, option) { /* Context initializer */ },
   mapper: function(data) { /* Context mapper method */ },
   clone: function() { /* Context clone method */}
 }
