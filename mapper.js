@@ -24,7 +24,7 @@
         init = this.map['!'] || function () { this.target = []; };
         init.call(this);
 
-        if (data instanceof Array) {
+        if (this.data instanceof Array) {
           for (i = 0; i < this.data.length; i += 1) {
             value = this.data[i];
             context = this.clone();
