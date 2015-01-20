@@ -185,3 +185,6 @@ JSON.stringify(mapper(document.body));
 
 ## License
 ### [MIT](LICENSE)
+
+## Version
+### 0.0.9
