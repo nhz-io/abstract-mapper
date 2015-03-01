@@ -1,8 +1,12 @@
 {
   "name": "abstract-mapper",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Abstract Object Mapper",
-  "main": "mapper.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "gulp test",
+    "build": "npm install && gulp test"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nhz-io/abstract-mapper.git"
@@ -11,12 +15,37 @@
     "nhz.io",
     "abstract",
     "object",
-    "mapper"
+    "mapper",
+    "abstract-mapper",
+    "coffee-script",
+    "coffeescript",
+    "coffee"
   ],
   "author": "nhz.io",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/nhz-io/abstract-mapper/issues"
   },
-  "homepage": "https://github.com/nhz-io/abstract-mapper"
+  "homepage": "https://github.com/nhz-io/abstract-mapper",
+  "devDependencies": {
+    "coffee-script": "^1.9.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-coffee": "^2.3.1",
+    "gulp-coffeelint": "^0.4.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-replace": "^0.5.3",
+    "gulp-util": "^3.0.4",
+    "run-sequence": "^1.0.2",
+    "should": "^5.0.1"
+  },
+  "gulpfile": {
+    "source": "./source",
+    "build": "./build",
+    "dist": "./dist",
+    "test": "./build/test"
+  },
+  "dependencies": {
+    "extends__": "0.0.3"
+  }
 }
