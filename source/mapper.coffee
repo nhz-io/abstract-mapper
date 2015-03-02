@@ -3,4 +3,6 @@ Context = require './context'
 Handler = require './handler'
 
 module.exports = class Mapper extends Base
-  constructor: (map) -> return -> null
+  init: (@map) ->
+    unless this instanceof Mapper
+      return new Context @options, handler
