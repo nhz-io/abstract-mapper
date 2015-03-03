@@ -9,8 +9,8 @@ npm install --save abstract-mapper
 ```
 
 ## Browser
-* [mapper.js](mapper.js)
-* [mapper.min.js](mapper.min.js)
+* [abstract-mapper.js](abstract-mapper.js)
+* [abstract-mapper.min.js](abstract-mapper.min.js)
 
 ## Use
 `var AbstractMapper = require('abstract-mapper');`

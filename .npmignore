@@ -6,6 +6,8 @@ build/
 .editorconfig
 .travis*
 .npmignore
+abstract-mapper.js
+abstract-mapper.min.js
 History.md
 gulpfile.*
 coffeelint.*

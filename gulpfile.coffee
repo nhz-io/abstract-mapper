@@ -8,10 +8,15 @@ $ =
   del        :require 'del'
   replace    :require 'gulp-replace'
   run        :require 'run-sequence'
+  uglify     :require 'gulp-uglify'
+  rename     :require 'gulp-rename'
 
-$.gulp.task 'default', (cb) -> $.run [ 'dist' ], cb
+$.gulp.task 'default', (cb) -> $.run [ 'dist', 'dist-browser' ], cb
 
 $.gulp.task 'clean', (cb) -> $.del [ _.build, _.dist ], cb
+
+$.gulp.task 'clean-browser', (cb) ->
+  $.del [ 'abstract-mapper.js', 'abstract-mapper.min.js'], cb
 
 $.gulp.task 'lint', ->
   $.gulp
@@ -27,12 +32,29 @@ $.gulp.task 'build', [ 'clean', 'lint'], ->
     .pipe $.replace re, '$1 = require("extends__")'
     .pipe $.gulp.dest _.build
 
+$.gulp.task 'build-browser', [ 'clean-browser', 'lint'], ->
+  re = /module\.exports/
+  $.gulp
+    .src [ "#{_.source}/abstract-mapper.coffee" ]
+    .pipe $.replace re, 'this.AbstractMapper'
+    .pipe $.coffee bare:false
+    .pipe $.gulp.dest './'
+
 $.gulp.task 'test', [ 'build' ], ->
   $.gulp
     .src [ "#{_.test}/**/*.js" ], read: false
     .pipe $.test reporter: 'tap'
 
+$.gulp.task 'test-browser', ->
+
 $.gulp.task 'dist', [ 'build', 'test' ], ->
   $.gulp
     .src [ "#{_.build}/**", "!#{_.build}/test{,/**}" ]
     .pipe $.gulp.dest _.dist
+
+$.gulp.task 'dist-browser', [ 'build-browser', 'test-browser' ], ->
+  $.gulp
+    .src [ './abstract-mapper.js' ]
+    .pipe $.uglify()
+    .pipe $.rename suffix: '.min'
+    .pipe $.gulp.dest './'
