@@ -1,190 +1,116 @@
-# Abstract Object Mapper
-## Install
-### Node
-`npm install --save abstract-mapper`
+# abstract-mapper
 
-### Browser
+## Abstract Object Mapper [![Build Status][travis-image]][travis-url]
+[![NPM][npm-image]][npm-url]
+
+## Install
+```
+npm install --save abstract-mapper
+```
+
+## Browser
 * [mapper.js](mapper.js)
 * [mapper.min.js](mapper.min.js)
 
-## Usage
-### Node
+## Use
 `var AbstractMapper = require('abstract-mapper');`
 
-### Object -> DOM
-```javascript
-var mapper = new AbstractMapper({
-  '!': function() { /* Context Initializer */
-    this.target = document.body;
-    this.target.innerHTML = '\
-      <div class="title"></div>\
-      <div class="content"></div>';
-  },
-  title: function(value) {
-    this.target.querySelector('.title').innerHTML = value;
-  },
-  content: function(value) {
-    this.target.querySelector('.content').innerHTML = value;
-  }
-});
-
-mapper({ title: 'Mapper Demo', content: 'FOOBAR!' });
+### Object -> Object, Swap keys and values
+```coffeescript
+  mapper = new AbstractMapper [
+    -> {}
+    ($) -> this[value] = key for key, value of $
+    -> this
+  ]
 ```
 
-### DOM -> Object
-```javascript
-var mapper = new AbstractMapper({
-  '!': function() { /* Context Initializer */
-    this.target = {};
-  },
-  innerHTML: function() {
-    this.target.title = this.data.querySelector('.title').innerHTML;
-    this.target.content = this.data.querySelector('.content').innerHTML;
-  }
-});
+### Explode Object recursively
+```coffeescript
+  mapper = new AbstractMapper [
+    -> if this instanceof Array then this else []
 
-mapper(document.body);
+    ($) ->
+      nested = []
+      for key, value of $
+        if typeof value is 'object'
+          nested.push value
+        else
+          result = {}
+          result[key] = value
+          @push result
+
+      for data in nested
+        mapper.call this, data
+
+    -> this
+  ]
 ```
 
-### Object -> Object
-```javascript
-var mapper = new AbstractMapper({
-  '!': function() { /* Context Initializer */
-    this.target = {};
-  },
-  key: function(value) {
-    this.target[key] = value;
-  }
-});
+### JSON -> DOM
+```coffeescript
+  mapper = new AbstractMapper [
+    ($) -> if typeof $ is 'string' then textMapper $ else nodeMapper $
+  ]
 
-mapper(document.body);
-```
+  textMapper = new AbstractMapper [ ($) -> document.createTextNode $ ]
 
-### Array -> Array
-```javascript
-var mapper = new AbstractMapper({
-  '!': function() {
-    if(this.idx >= 0) {
-      var target = {};
-      this.target.push(target);
-      this.target = target;
-    } else {
-      this.target = [];
-    }
-  },
-  key: function(value) {
-    this.target.foo = value;
-  }
-});
-
-var result = mapper([ {key:'foo'}, {key:'bar'} ]);
-```
-
-### DOM -> DOM
-```javascript
-var source, target;
-source = document.createElement('div');
-target = document.createElement('div');
-
-source.innerHTML = '\
-  <div class="foo">FOO!</div>\
-  <div class="bar">BAR!</div>';
-
-target.innerHTML = '\
-  <div class="foo"></div>\
-  <div class="bar"></div>';
-
-document.body.appendChild(source);
-document.body.appendChild(target);
-
-var mapper = new AbstractMapper({
-  '!': function() { /* Context Initializer */
-    this.target = target;
-  },
-  innerHTML: function() {
-    var source, target;
-    source = this.data.querySelector('.foo');
-    target = this.target.querySelector('.foo');
-    target.innerHTML = source.innerHTML;
-
-    source = this.data.querySelector('.bar');
-    target = this.target.querySelector('.bar');
-    target.innerHTML = source.innerHTML;
-  }
-});
-
-var result = mapper(source);
+  nodeMapper = new AbstractMapper [
+    ($) -> document.createElement $.element or 'div'
+    ($) -> @className = $.class if $.class
+    ($) -> @setAttribute 'style', $.style if $.style
+    ($) -> @appendChild mapper child for child in $.children or []
+    -> this
+  ]
 ```
 
 ### DOM -> JSON
-```javascript
-var mapper = AbstractMapper({
-  '!': function() { this.target = {}; },
-  nodeName: function(value) { this.target.element = value; },
-  childNodes: function(value) {
-    var i, context, child;
-    if(value.length > 0) {
-      this.target.children = [];
-      for(i=0; i< value.length; i++) {
-        child = value[i];
-        if(child.nodeType === 3) {
-          if(child.textContent.replace(/^\s+$/gm, '').length > 0) {
-            this.target.children.push(child.textContent);
-          }
-        } else {
-          context = this.clone();
-          this.target.children.push(context.mapper(child));
-        }
-      }
-    }
-  },
-  attributes: function(value) {
-    var i;
-    if(value.length > 0) {
-      this.target.attributes = {};
-      for(i=0; i < value.length; i++) {
-        this.target.attributes[value[i].name] = value[i].value;
-      }
-    }
-  }
-});
+```coffeescript
+  mapper = new AbstractMapper [
+    ($) -> if $.nodeType is 3 then textMapper $ else nodeMapper $
+  ]
 
-JSON.stringify(mapper(document.body));
+  textMapper = new AbstractMapper [ ($) -> $.data ]
+
+  nodeMapper = new AbstractMapper [
+    -> {}
+    ($) -> @element = $.nodeName.toLowerCase()
+    ($) -> @class = $.className if $.className
+    ($) -> @style = style if style = $.getAttribute? 'style'
+    ($) -> @children = [] if $.childNodes.length
+    ($) -> @children.push mapper child for child in $.childNodes
+    -> this
+  ]
 ```
 
-### Map
-```javascript
-/* For every method below `this` is set to current Context */
-{
-  "!": function() { /* Initializer */ },
-  key: function(value) { /* Mapper function */},
-  deep: { /* Nested Object map */
-    key: function(value) { /* Nested Mapper function */ },
-    list: [{ /* Nested Array map */
-      key: function(value) { /* Executed for each item */}
-    }]
-  }
-}
+Build
+-----
+```
+git clone https://github.com/nhz-io/abstract-mapper.git
+cd abstract-mapper
+npm install
+gulp
 ```
 
-### Context
-```javascript
-{
-  target: {}, /* Mapper target. Set with Initializer */
-  parent: null, /* Set to parent Context when nested */
-  data: {}, /* Set to the data passed to mapper */
-  map: {}, /* Map passed to mapper */
-  idx: 0, /* Exists when mapping list item */
-  init: function(map, option) { /* Context initializer */ },
-  mapper: function(data) { /* Context mapper method */ },
-  clone: function() { /* Context clone method */}
-}
-```
 ## Benchmark
-###  [JSPERF](http://jsperf.com/abstract-mapper)
+###  [JSPERF](http://jsperf.com/abstract-mapper/6)
 
-## License
-### [MIT](LICENSE)
+LICENSE
+-------
+#### [MIT](LICENSE)
 
-## Version
-### 0.0.10
+VERSION
+-------
+#### 0.1.0
+* API is totally different from v0.0.10 (Abusing [CoffeeScript][coffee-url] sugar)
+* Added build system ([GULP][gulp-url])
+* Added travis-ci
+
+
+[coffee-url]: https://github.com/jashkenas/coffeescript
+[gulp-url]: https://github.com/gulpjs/gulp
+
+[travis-image]: https://travis-ci.org/nhz-io/abstract-mapper.svg
+[travis-url]: https://travis-ci.org/nhz-io/abstract-mapper
+
+[npm-image]: https://nodei.co/npm/abstract-mapper.png
+[npm-url]: https://nodei.co/npm/abstract-mapper
