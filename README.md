@@ -100,6 +100,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.1.1
+* Fixed [.npmignore](.npmignore) to exclude only browser dist files
+
 #### 0.1.0
 * API is totally different from v0.0.10 (Abusing [CoffeeScript][coffee-url] sugar)
 * Added build system ([GULP][gulp-url])
