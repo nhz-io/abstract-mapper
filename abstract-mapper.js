@@ -22,18 +22,18 @@
         }
       }
       return function() {
-        var init, j, len1, length, result;
+        var init, j, last, len1, length, result;
         init = map[0];
         length = map.length;
         for (j = 0, len1 = map.length; j < len1; j++) {
           mapper = map[j];
           if (!result) {
-            result = mapper.apply(this, arguments);
+            last = result = mapper.apply(this, arguments);
           } else {
-            mapper.apply(result, arguments);
+            last = mapper.apply(result, arguments);
           }
         }
-        return result;
+        return last;
       };
     }
 

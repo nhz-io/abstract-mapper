@@ -14,7 +14,7 @@ module.exports = class AbstractMapper
       length = map.length
       for mapper in map
         unless result
-          result = mapper.apply this, arguments
+          last = result = mapper.apply this, arguments
         else
-          mapper.apply result, arguments
-      return result
+          last = mapper.apply result, arguments
+      return last
