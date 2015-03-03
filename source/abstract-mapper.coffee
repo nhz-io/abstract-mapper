@@ -9,7 +9,12 @@ module.exports = class AbstractMapper
           mapper = new @constructor mapper
           map.push -> mapper this
 
-    return (data) ->
+    return ->
+      init = map[0]
+      length = map.length
       for mapper in map
-        result = mapper.call this, data
+        unless result
+          result = mapper.apply this, arguments
+        else
+          mapper.apply result, arguments
       return result
