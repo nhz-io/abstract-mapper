@@ -1,11 +1,10 @@
 {
   "name": "abstract-mapper",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "Abstract Object Mapper",
   "main": "dist/index.js",
   "scripts": {
-    "test": "gulp test",
-    "build": "npm install && gulp test"
+    "test": "gulp"
   },
   "repository": {
     "type": "git",
@@ -46,8 +45,5 @@
     "build": "./build",
     "dist": "./dist",
     "test": "./build/test"
-  },
-  "dependencies": {
-    "extends__": "0.0.3"
   }
 }
