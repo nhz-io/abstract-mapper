@@ -17,34 +17,33 @@ describe 'AbstractMapper', ->
       test = mapper key1:'value1', key2:'value2'
       test.value1.should.be.equal 'key1'
       test.value2.should.be.equal 'key2'
-      console.log test
 
     it 'should explode the object into key:value pairs', ->
-        mapper = new AbstractMapper [
-          -> if this instanceof Array then this else []
-          ($) ->
-            nested = []
-            for key, value of $
-              if typeof value is 'object'
-                nested.push value
-              else
-                result = {}
-                result[key] = value
-                @push result
+      mapper = new AbstractMapper [
+        -> if this instanceof Array then this else []
+        ($) ->
+          nested = []
+          for key, value of $
+            if typeof value is 'object'
+              nested.push value
+            else
+              result = {}
+              result[key] = value
+              @push result
 
-            for data in nested
-              mapper.call this, data
-          -> this
-        ]
+          for data in nested
+            mapper.call this, data
+        -> this
+      ]
 
-        test = mapper
-          key1: 'value1'
-          nested1:
-            key2: 'value2'
-            nested2:
-              key3: 'value3'
+      test = mapper
+        key1: 'value1'
+        nested1:
+          key2: 'value2'
+          nested2:
+            key3: 'value3'
 
-        test.length.should.be.equal 3
-        test[0].key1.should.be.equal 'value1'
-        test[1].key2.should.be.equal 'value2'
-        test[2].key3.should.be.equal 'value3'
+      test.length.should.be.equal 3
+      test[0].key1.should.be.equal 'value1'
+      test[1].key2.should.be.equal 'value2'
+      test[2].key3.should.be.equal 'value3'
