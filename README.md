@@ -100,6 +100,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.1.2
+* Added empty `Context` class under `AbstractMapper.Context`
+
 #### 0.1.1
 * Fixed [.npmignore](.npmignore) to exclude only browser dist files
 

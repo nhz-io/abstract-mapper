@@ -2,6 +2,15 @@
   var AbstractMapper;
 
   this.AbstractMapper = AbstractMapper = (function() {
+    var Context;
+
+    AbstractMapper.Context = Context = (function() {
+      function Context() {}
+
+      return Context;
+
+    })();
+
     function AbstractMapper(_map) {
       var i, len, map, mapper;
       if (_map == null) {

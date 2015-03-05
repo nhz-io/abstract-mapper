@@ -1,4 +1,5 @@
 module.exports = class AbstractMapper
+  @Context = class Context
   constructor: (_map = []) ->
     map = []
     for mapper in _map
