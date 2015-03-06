@@ -100,6 +100,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.1.3
+* Fixed `RangeError: Maximum call stack size exceeded` on nested mappers
+
 #### 0.1.2
 * Added empty `Context` class under `AbstractMapper.Context`
 

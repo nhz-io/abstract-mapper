@@ -25,9 +25,11 @@
             break;
           case !(mapper instanceof Array):
             mapper = new this.constructor(mapper);
-            map.push(function() {
-              return mapper(this);
-            });
+            map.push((function(mapper) {
+              return function() {
+                return mapper(this);
+              };
+            })(mapper));
         }
       }
       return function() {

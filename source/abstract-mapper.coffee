@@ -8,7 +8,7 @@ module.exports = class AbstractMapper
           map.push mapper
         when mapper instanceof Array
           mapper = new @constructor mapper
-          map.push -> mapper this
+          map.push do (mapper) -> return -> mapper this
 
     return ->
       init = map[0]
