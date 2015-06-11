@@ -100,6 +100,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.1.4
+* Removed junk rudiment (AbstractMapper.Context)
+
 #### 0.1.3
 * Fixed `RangeError: Maximum call stack size exceeded` on nested mappers
 
