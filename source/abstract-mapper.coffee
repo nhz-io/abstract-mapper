@@ -1,20 +1,18 @@
 module.exports = class AbstractMapper
   constructor: (_map = []) ->
     map = []
-    for mapper in _map
+    for handler in _map
       switch
-        when typeof mapper is 'function'
-          map.push mapper
-        when mapper instanceof Array
-          mapper = new @constructor mapper
-          map.push do (mapper) -> return -> mapper this
+        when typeof handler is 'function'
+          map.push handler
+        when handler instanceof Array
+          mapper = new @constructor handler
+          map.push do (mapper) -> return -> mapper.apply this, arguments
 
     return ->
-      init = map[0]
-      length = map.length
-      for mapper in map
-        unless result
-          last = result = mapper.apply this, arguments
+      for handler in map
+        unless context
+          context = result = handler.apply this, arguments
         else
-          last = mapper.apply result, arguments
-      return last
+          result = handler.apply context, arguments
+      return result
