@@ -3,6 +3,23 @@
 ## Abstract Object Mapper [![Build Status][travis-image]][travis-url]
 [![NPM][npm-image]][npm-url]
 
+Utility class to generate a **mapper function** from the array of
+**handler functions**. The array of handler functions is passed
+as a first argument ot the `AbstractMapper` constructor. The **first**
+handler function in the array being a **context initializer**.
+
+The result of context initializer is passed as `thisarg` to every
+subsequent handler function. Each handler function receives the
+same arguments. The result of the **last** handler function is the value
+that the mapper function will return.
+
+The array of handler functions that is passed to `AbstractMapper`
+constructor, can also contain **nested arrays**. In this case, a **nested mapper**
+will be constructed from this array. This nested mapper will be called with
+the same `thisarg`, as the rest of the handler functions.
+
+This module was created with [CoffeeScript][coffeescript-url] in mind.
+
 ## Install
 ```
 npm install --save abstract-mapper
@@ -12,8 +29,21 @@ npm install --save abstract-mapper
 * [abstract-mapper.js](abstract-mapper.js)
 * [abstract-mapper.min.js](abstract-mapper.min.js)
 
-## Use
-`var AbstractMapper = require('abstract-mapper');`
+## Usage
+
+```coffeescript
+mapper = new AbstractMapper [
+  (args...) -> ...    # Init
+  (args...) -> ...
+  [                   # Nested mapper
+    (args...) -> ...
+    (args...) -> ...
+  ]
+  (args...) -> ...    # Result
+]
+```
+
+## Examples
 
 ### Object -> Object, Swap keys and values
 ```coffeescript
@@ -100,6 +130,9 @@ LICENSE
 
 VERSION
 -------
+#### 0.1.5
+* More README, More meaningful variable names
+
 #### 0.1.4
 * Removed junk rudiment (AbstractMapper.Context)
 
@@ -113,12 +146,12 @@ VERSION
 * Fixed [.npmignore](.npmignore) to exclude only browser dist files
 
 #### 0.1.0
-* API is totally different from v0.0.10 (Abusing [CoffeeScript][coffee-url] sugar)
+* API is totally different from v0.0.10 (Abusing [CoffeeScript][coffeescript-url] sugar)
 * Added build system ([GULP][gulp-url])
 * Added travis-ci
 
 
-[coffee-url]: https://github.com/jashkenas/coffeescript
+[coffeescript-url]: https://github.com/jashkenas/coffeescript
 [gulp-url]: https://github.com/gulpjs/gulp
 
 [travis-image]: https://travis-ci.org/nhz-io/abstract-mapper.svg

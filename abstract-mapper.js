@@ -3,39 +3,37 @@
 
   this.AbstractMapper = AbstractMapper = (function() {
     function AbstractMapper(_map) {
-      var i, len, map, mapper;
+      var handler, i, len, map, mapper;
       if (_map == null) {
         _map = [];
       }
       map = [];
       for (i = 0, len = _map.length; i < len; i++) {
-        mapper = _map[i];
+        handler = _map[i];
         switch (false) {
-          case typeof mapper !== 'function':
-            map.push(mapper);
+          case typeof handler !== 'function':
+            map.push(handler);
             break;
-          case !(mapper instanceof Array):
-            mapper = new this.constructor(mapper);
+          case !(handler instanceof Array):
+            mapper = new this.constructor(handler);
             map.push((function(mapper) {
               return function() {
-                return mapper(this);
+                return mapper.apply(this, arguments);
               };
             })(mapper));
         }
       }
       return function() {
-        var init, j, last, len1, length, result;
-        init = map[0];
-        length = map.length;
+        var context, j, len1, result;
         for (j = 0, len1 = map.length; j < len1; j++) {
-          mapper = map[j];
-          if (!result) {
-            last = result = mapper.apply(this, arguments);
+          handler = map[j];
+          if (!context) {
+            context = result = handler.apply(this, arguments);
           } else {
-            last = mapper.apply(result, arguments);
+            result = handler.apply(context, arguments);
           }
         }
-        return last;
+        return result;
       };
     }
 
