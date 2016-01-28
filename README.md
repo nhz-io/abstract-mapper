@@ -154,8 +154,8 @@ VERSION
 [coffeescript-url]: https://github.com/jashkenas/coffeescript
 [gulp-url]: https://github.com/gulpjs/gulp
 
-[travis-image]: https://travis-ci.org/nhz-io/abstract-mapper.svg
-[travis-url]: https://travis-ci.org/nhz-io/abstract-mapper
+[travis-image]: https://travis-ci.org/NHZio/abstract-mapper.svg
+[travis-url]: https://travis-ci.org/NHZio/abstract-mapper
 
 [npm-image]: https://nodei.co/npm/abstract-mapper.png
 [npm-url]: https://nodei.co/npm/abstract-mapper
